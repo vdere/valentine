@@ -26,6 +26,8 @@
             align-items: center;
             overflow-x: hidden;
             position: relative;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         @keyframes gradientShift {
@@ -167,6 +169,9 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             text-transform: uppercase;
             letter-spacing: 1px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .yes-btn {
@@ -331,6 +336,31 @@
             }
         }
 
+        /* Suspense GIFs styling */
+        .suspense-gifs img {
+            animation: suspenseWiggle 2s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .suspense-gifs img:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes suspenseWiggle {
+            0%, 100% {
+                transform: rotate(-2deg) scale(1);
+            }
+            25% {
+                transform: rotate(2deg) scale(1.02);
+            }
+            50% {
+                transform: rotate(-1deg) scale(1);
+            }
+            75% {
+                transform: rotate(1deg) scale(1.02);
+            }
+        }
+
         /* Sparkles */
         .sparkle {
             position: fixed;
@@ -353,45 +383,270 @@
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .container {
-                padding: 35px 25px;
+                padding: 30px 20px;
+                max-width: 95%;
+                border-radius: 30px;
             }
 
             h1 {
-                font-size: 26px;
+                font-size: 24px;
+                margin-bottom: 10px;
             }
 
             .name {
-                font-size: 38px;
+                font-size: 36px;
+                margin-bottom: 20px;
+                letter-spacing: 1px;
             }
 
             .question {
-                font-size: 22px;
+                font-size: 20px;
+                margin-bottom: 30px;
             }
 
             .emoji {
-                font-size: 80px;
+                font-size: 70px;
+                margin-bottom: 15px;
+            }
+
+            .buttons {
+                min-height: 100px;
+                gap: 15px;
             }
 
             button {
-                padding: 15px 35px;
+                padding: 14px 30px;
+                font-size: 18px;
+            }
+
+            .heart {
                 font-size: 20px;
             }
 
             .celebration h1 {
-                font-size: 42px;
-                padding: 0 20px;
+                font-size: 36px;
+                padding: 0 15px;
+                text-align: center;
             }
 
             .celebration p {
-                font-size: 22px;
-                padding: 0 20px;
+                font-size: 20px;
+                padding: 0 15px;
+                text-align: center;
+            }
+
+            .celebration .emoji {
+                font-size: 70px;
             }
             
+            .office-gifs {
+                margin-top: 20px !important;
+                gap: 10px !important;
+                padding: 0 10px;
+            }
+
             .office-gifs img {
-                width: 140px !important;
-                margin: 10px 5px;
+                width: 45% !important;
+                max-width: 180px !important;
+                margin: 5px !important;
+            }
+
+            .suspense-gifs {
+                margin: 15px 0 !important;
+                gap: 10px !important;
+            }
+
+            .suspense-gifs img {
+                width: 90px !important;
+                height: 90px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 15px;
+                max-width: 98%;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .name {
+                font-size: 32px;
+            }
+
+            .question {
+                font-size: 18px;
+                margin-bottom: 25px;
+            }
+
+            .emoji {
+                font-size: 60px;
+            }
+
+            .buttons {
+                min-height: 80px;
+            }
+
+            button {
+                padding: 12px 25px;
+                font-size: 16px;
+                letter-spacing: 0.5px;
+            }
+
+            .celebration h1 {
+                font-size: 28px;
+                line-height: 1.3;
+            }
+
+            .celebration p {
+                font-size: 18px;
+            }
+
+            .celebration .emoji {
+                font-size: 60px;
+                margin-bottom: 15px;
+            }
+
+            .office-gifs img {
+                width: 45% !important;
+                max-width: 150px !important;
+            }
+
+            .suspense-gifs {
+                margin: 12px 0 !important;
+                gap: 8px !important;
+            }
+
+            .suspense-gifs img {
+                width: 75px !important;
+                height: 75px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 20px 12px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            .name {
+                font-size: 28px;
+            }
+
+            .question {
+                font-size: 16px;
+            }
+
+            .emoji {
+                font-size: 50px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .celebration h1 {
+                font-size: 24px;
+            }
+
+            .celebration p {
+                font-size: 16px;
+            }
+
+            .office-gifs img {
+                width: 43% !important;
+                max-width: 130px !important;
+            }
+
+            .suspense-gifs {
+                margin: 10px 0 !important;
+                gap: 6px !important;
+            }
+
+            .suspense-gifs img {
+                width: 65px !important;
+                height: 65px !important;
+            }
+        }
+
+        /* Landscape orientation on mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                padding: 15px 20px;
+                margin: 10px auto;
+            }
+
+            .emoji {
+                font-size: 50px;
+                margin-bottom: 10px;
+            }
+
+            h1 {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+
+            .name {
+                font-size: 28px;
+                margin-bottom: 12px;
+            }
+
+            .question {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            .buttons {
+                min-height: 60px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .celebration h1 {
+                font-size: 24px;
+            }
+
+            .celebration p {
+                font-size: 16px;
+                margin-bottom: 15px;
+            }
+
+            .celebration .emoji {
+                font-size: 40px;
+            }
+
+            .office-gifs {
+                margin-top: 15px !important;
+            }
+
+            .office-gifs img {
+                width: 22% !important;
+                max-width: 120px !important;
+            }
+
+            .suspense-gifs {
+                margin: 8px 0 !important;
+                gap: 5px !important;
+            }
+
+            .suspense-gifs img {
+                width: 60px !important;
+                height: 60px !important;
             }
         }
     </style>
@@ -412,9 +667,17 @@
         <div class="question">
             Will you be my Valentine? 💕
         </div>
+        
+        <!-- Suspense GIFs -->
+        <div class="suspense-gifs" style="margin: 25px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3eTR2cGUwM3ZsZDZzMTg2cm9pcXJmZ3I4eWcxd2EybWYyanF3Zm5nbiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bQtUQp1wRZIUujzJ7E/giphy.gif" alt="Michael Scott nervous" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+            <img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExazBzeTlwYjJmZTBjZjg1Mm10aGtzNHNxdXMyaTE5OWVhZmJ1eTUxbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MZocLC5dJprPTcrm65/giphy.gif" alt="Michael Scott stressed" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+            <img src="https://media.giphy.com/media/b8RQzkElbBsXqEPF2X/giphy.gif" alt="Jim waiting" style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+        </div>
+        
         <div class="buttons">
             <button class="yes-btn" onclick="handleYes()">Yes! 💖</button>
-            <button class="no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton(event)">No 😢</button>
+            <button class="no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton(event)" onclick="moveButton(event)">No 😢</button>
         </div>
     </div>
 
@@ -429,66 +692,92 @@
             
             <!-- The Office GIFs -->
             <div class="office-gifs" style="margin-top: 30px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                <img src="https://media.giphy.com/media/g9582DNuQppxC/giphy.gif" alt="Michael Scott excited" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                <img src="https://media.giphy.com/media/l41m04gr7tRet7Uas/giphy.gif" alt="Office party" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExb3FkcDZmMjJkMnhqZXo2ejhmbDhjNzlsMDh5ODI1ZDg5cDVvdnB5aSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l0amJzVHIAfl7jMDos/giphy.gif" alt="Michael Scott celebrating" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/BlVnrxJgTGsUw/giphy.gif" alt="Office party" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                 <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Kevin excited" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                <img src="https://media.giphy.com/media/1kTLecw8TFLdCq4IM7/giphy.gif" alt="Dwight celebrating" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/3o7qDSOvfaCO9b3MlO/giphy.gif" alt="Dwight celebrating" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3MxMzUzZGZjbmlkcm5iNHBwcmZncG5raG9zaHNrejhtZ2FtMmJrciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xULW8Bx2HlkdALCRQk/giphy.gif" alt="Jim and Pam" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            </div>
+            
+            <!-- Additional celebration text -->
+            <div style="margin-top: 30px; animation: slideUp 1s ease 0.5s both;">
+                <p style="font-size: 24px; margin: 10px 0;">💝 Best. Decision. Ever! 💝</p>
+                <p style="font-size: 20px; margin: 10px 0;">✨ This is going to be amazing! ✨</p>
             </div>
         </div>
     </div>
 
     <!-- Audio files with autoplay -->
-    <audio id="suspenseMusic" loop autoplay muted>
+    <audio id="suspenseMusic" loop preload="auto" autoplay muted>
+        <source src="suspense.mp3" type="audio/mpeg">
         <source src="./suspense.mp3" type="audio/mpeg">
     </audio>
 
-    <audio id="romanticMusic" loop>
+    <audio id="romanticMusic" loop preload="auto">
+        <source src="zara_sa.mp3" type="audio/mpeg">
         <source src="./zara_sa.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         let noBtnClickCount = 0;
         let fireworksInterval;
-        let musicPlaying = false;
+        let audioUnmuted = false;
         const noBtn = document.getElementById('noBtn');
         const suspenseMusic = document.getElementById('suspenseMusic');
         const romanticMusic = document.getElementById('romanticMusic');
 
         // Set volumes
-        suspenseMusic.volume = 0.6;
-        romanticMusic.volume = 0.8;
+        suspenseMusic.volume = 0.4;
+        romanticMusic.volume = 0.6;
 
-        // Start muted autoplay on page load (bypasses browser restrictions)
+        // Start muted autoplay on page load (bypasses browser autoplay restrictions)
         window.addEventListener('load', function() {
             suspenseMusic.play().catch(error => {
-                console.log('Will start on first interaction');
+                console.log('Autoplay started muted');
             });
         });
 
-        // Unmute and ensure music plays on first interaction
-        let musicStarted = false;
-        function ensureMusicPlays() {
-            if (!musicStarted) {
-                suspenseMusic.muted = false; // Unmute
-                suspenseMusic.play().catch(error => {
-                    console.log('Playing music...');
-                });
-                musicStarted = true;
-                musicPlaying = true;
+        // Error handling for audio files
+        suspenseMusic.addEventListener('error', function(e) {
+            console.error('Suspense music failed to load:', e);
+            console.log('Attempted path:', suspenseMusic.src);
+        });
+
+        romanticMusic.addEventListener('error', function(e) {
+            console.error('Romantic music failed to load:', e);
+            console.log('Attempted path:', romanticMusic.src);
+        });
+
+        // Success handlers
+        suspenseMusic.addEventListener('canplaythrough', function() {
+            console.log('Suspense music loaded successfully!');
+        });
+
+        romanticMusic.addEventListener('canplaythrough', function() {
+            console.log('Romantic music loaded successfully!');
+        });
+
+        // Function to unmute audio on first user interaction
+        function unmuteAudio() {
+            if (!audioUnmuted) {
+                suspenseMusic.muted = false;
+                audioUnmuted = true;
+                console.log('Audio unmuted!');
             }
         }
 
-        // Multiple triggers to ensure audio starts
-        document.addEventListener('click', ensureMusicPlays, { once: true });
-        document.addEventListener('touchstart', ensureMusicPlays, { once: true });
-        document.addEventListener('mousemove', ensureMusicPlays, { once: true });
-        document.addEventListener('keydown', ensureMusicPlays, { once: true });
+        // Unmute on any user interaction
+        ['click', 'touchstart', 'keydown', 'mousemove'].forEach(event => {
+            document.addEventListener(event, unmuteAudio, { once: true });
+        });
 
         function switchToRomanticMusic() {
             suspenseMusic.pause();
             suspenseMusic.currentTime = 0;
-            romanticMusic.play().catch((error) => {
-                console.log('Switching to romantic music...');
+            romanticMusic.play().then(() => {
+                console.log('Romantic music started!');
+            }).catch((error) => {
+                console.log('Romantic music failed:', error);
             });
         }
 
@@ -497,7 +786,8 @@
                 event.preventDefault();
             }
             
-            ensureMusicPlays();
+            // Ensure audio is unmuted on interaction
+            unmuteAudio();
             
             noBtnClickCount++;
             
@@ -524,7 +814,10 @@
         }
 
         function handleYes() {
-            ensureMusicPlays();
+            // Ensure audio is unmuted
+            unmuteAudio();
+            
+            // Switch to romantic music
             switchToRomanticMusic();
             
             const celebration = document.getElementById('celebration');
@@ -553,6 +846,34 @@
                     }
                 }, 500);
             }, 3000);
+            
+            // Add burst confetti every 3 seconds
+            setInterval(() => {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#FF6B9D', '#F35588', '#FFD700', '#ff1493', '#00CED1']
+                });
+            }, 3000);
+            
+            // Add side confetti bursts
+            setInterval(() => {
+                confetti({
+                    particleCount: 50,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#FF6B9D', '#FFD700', '#00ff00']
+                });
+                confetti({
+                    particleCount: 50,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#F35588', '#00bfff', '#ff1493']
+                });
+            }, 4000);
         }
         
         // Professional fireworks using canvas-confetti library
