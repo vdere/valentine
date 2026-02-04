@@ -430,14 +430,15 @@
             <!-- The Office GIFs -->
             <div class="office-gifs" style="margin-top: 30px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                 <img src="https://media.giphy.com/media/g9582DNuQppxC/giphy.gif" alt="Michael Scott excited" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                <img src="https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif" alt="Office celebration" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/l41m04gr7tRet7Uas/giphy.gif" alt="Office party" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                 <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Kevin excited" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <img src="https://media.giphy.com/media/1kTLecw8TFLdCq4IM7/giphy.gif" alt="Dwight celebrating" style="width: 200px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
             </div>
         </div>
     </div>
 
-    <!-- Audio files -->
-    <audio id="suspenseMusic" loop>
+    <!-- Audio files with autoplay -->
+    <audio id="suspenseMusic" loop autoplay muted>
         <source src="./suspense.mp3" type="audio/mpeg">
     </audio>
 
@@ -457,26 +458,37 @@
         suspenseMusic.volume = 0.6;
         romanticMusic.volume = 0.8;
 
-        // Try to start music on any interaction
+        // Start muted autoplay on page load (bypasses browser restrictions)
+        window.addEventListener('load', function() {
+            suspenseMusic.play().catch(error => {
+                console.log('Will start on first interaction');
+            });
+        });
+
+        // Unmute and ensure music plays on first interaction
         let musicStarted = false;
         function ensureMusicPlays() {
             if (!musicStarted) {
+                suspenseMusic.muted = false; // Unmute
                 suspenseMusic.play().catch(error => {
-                    console.log('Music will play on next interaction');
+                    console.log('Playing music...');
                 });
                 musicStarted = true;
+                musicPlaying = true;
             }
         }
 
+        // Multiple triggers to ensure audio starts
         document.addEventListener('click', ensureMusicPlays, { once: true });
         document.addEventListener('touchstart', ensureMusicPlays, { once: true });
-        document.addEventListener('mouseover', ensureMusicPlays, { once: true });
+        document.addEventListener('mousemove', ensureMusicPlays, { once: true });
+        document.addEventListener('keydown', ensureMusicPlays, { once: true });
 
         function switchToRomanticMusic() {
             suspenseMusic.pause();
             suspenseMusic.currentTime = 0;
             romanticMusic.play().catch((error) => {
-                console.log('Romantic music loading...');
+                console.log('Switching to romantic music...');
             });
         }
 
