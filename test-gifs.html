@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Animation Test</title>
+    <style>
+        body {
+            background: #333;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .gif-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .gif-item {
+            text-align: center;
+        }
+        img {
+            border: 2px solid white;
+            border-radius: 8px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>GIF Animation Test Page</h1>
+    <p>If these GIFs are not animating, there's an issue with the downloaded files.</p>
+    
+    <h2>Suspense GIFs:</h2>
+    <div class="gif-container">
+        <div class="gif-item">
+            <img src="gifs/michael-nervous.gif?v=2" alt="Michael Scott nervous">
+            <p>Michael Nervous</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/michael-stressed.gif?v=2" alt="Michael Scott stressed">
+            <p>Michael Stressed</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/jim-waiting.gif?v=2" alt="Jim waiting">
+            <p>Jim Waiting</p>
+        </div>
+    </div>
+
+    <h2>Celebration GIFs:</h2>
+    <div class="gif-container">
+        <div class="gif-item">
+            <img src="gifs/michael-celebrating.gif?v=2" alt="Michael Scott celebrating">
+            <p>Michael Celebrating</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/office-party.gif?v=2" alt="Office party">
+            <p>Office Party</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/kevin-excited.gif?v=2" alt="Kevin excited">
+            <p>Kevin Excited</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/dwight-celebrating.gif?v=2" alt="Dwight celebrating">
+            <p>Dwight Celebrating</p>
+        </div>
+        <div class="gif-item">
+            <img src="gifs/jim-pam.gif?v=2" alt="Jim and Pam">
+            <p>Jim and Pam</p>
+        </div>
+    </div>
+
+    <script>
+        // Log when images load to help debug
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('load', function() {
+                console.log('Loaded:', this.alt, 'Size:', this.naturalWidth, 'x', this.naturalHeight);
+            });
+            img.addEventListener('error', function() {
+                console.error('Failed to load:', this.alt);
+            });
+        });
+    </script>
+</body>
+</html>
