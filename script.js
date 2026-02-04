@@ -7,7 +7,7 @@ const romanticMusic = document.getElementById('romanticMusic');
 
 // Set volumes
 suspenseMusic.volume = 0.4;
-romanticMusic.volume = 0.6;
+romanticMusic.volume = 0.4;
 
 // Start muted autoplay on page load (bypasses browser autoplay restrictions)
 window.addEventListener('load', function() {
@@ -126,31 +126,45 @@ function handleYes() {
         }, 500);
     }, 3000);
     
-    // Add burst confetti every 3 seconds
+    // Add continuous firework bursts every 3 seconds
     setInterval(() => {
         confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#FF6B9D', '#F35588', '#FFD700', '#ff1493', '#00CED1']
+            particleCount: 120,
+            startVelocity: 50,
+            spread: 360,
+            ticks: 100,
+            gravity: 0.8,
+            origin: { x: Math.random() * 0.6 + 0.2, y: Math.random() * 0.2 + 0.2 },
+            colors: ['#FF6B9D', '#F35588', '#FFD700', '#ff1493', '#00CED1', '#ffffff'],
+            shapes: ['circle', 'square'],
+            scalar: 1.3,
+            zIndex: 10001
         });
     }, 3000);
     
-    // Add side confetti bursts
+    // Add side firework bursts
     setInterval(() => {
         confetti({
-            particleCount: 50,
+            particleCount: 80,
             angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: ['#FF6B9D', '#FFD700', '#00ff00']
+            startVelocity: 45,
+            spread: 120,
+            ticks: 100,
+            gravity: 0.85,
+            origin: { x: 0.1, y: 0.3 },
+            colors: ['#FF6B9D', '#FFD700', '#00ff00'],
+            zIndex: 10001
         });
         confetti({
-            particleCount: 50,
+            particleCount: 80,
             angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: ['#F35588', '#00bfff', '#ff1493']
+            startVelocity: 45,
+            spread: 120,
+            ticks: 100,
+            gravity: 0.85,
+            origin: { x: 0.9, y: 0.3 },
+            colors: ['#F35588', '#00bfff', '#ff1493'],
+            zIndex: 10001
         });
     }, 4000);
 }
@@ -159,12 +173,12 @@ function handleYes() {
 function launchFireworksShow() {
     const duration = 15 * 1000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 10001 };
 
     function randomInRange(min, max) {
         return Math.random() * (max - min) + min;
     }
 
+    // Realistic fireworks that explode in the sky
     const interval = setInterval(function() {
         const timeLeft = animationEnd - Date.now();
 
@@ -172,45 +186,67 @@ function launchFireworksShow() {
             return clearInterval(interval);
         }
 
-        const particleCount = 50 * (timeLeft / duration);
+        const particleCount = 100;
         
+        // Create firework explosions at random positions in the upper portion of screen
         confetti({
-            ...defaults,
             particleCount,
-            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-            colors: ['#FF6B9D', '#F35588', '#FFD700', '#00ff00', '#00bfff']
+            startVelocity: 45,
+            spread: 360,
+            ticks: 100,
+            gravity: 0.8,
+            decay: 0.91,
+            scalar: 1.2,
+            origin: { 
+                x: randomInRange(0.2, 0.8), 
+                y: randomInRange(0.2, 0.4) 
+            },
+            colors: ['#FFD700', '#FF6B9D', '#00ff00', '#00bfff', '#FF1744', '#ffffff'],
+            shapes: ['circle', 'square'],
+            zIndex: 10001
         });
-        confetti({
-            ...defaults,
-            particleCount,
-            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-            colors: ['#FF1744', '#FED6E3', '#ffffff', '#FF69B4', '#00CED1']
-        });
-    }, 250);
+    }, 400);
 
+    // Additional spectacular firework bursts
     setTimeout(() => {
         confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#FF6B9D', '#F35588', '#FFD700']
+            particleCount: 150,
+            startVelocity: 55,
+            spread: 360,
+            ticks: 120,
+            gravity: 0.8,
+            decay: 0.9,
+            scalar: 1.5,
+            origin: { x: 0.5, y: 0.3 },
+            colors: ['#FFD700', '#FF6B9D', '#F35588', '#ffffff'],
+            shapes: ['star', 'circle'],
+            zIndex: 10001
         });
     }, 500);
 
+    // Side fireworks
     setTimeout(() => {
         confetti({
             particleCount: 100,
             angle: 60,
-            spread: 55,
-            origin: { x: 0 },
-            colors: ['#00ff00', '#00bfff', '#FF1744']
+            startVelocity: 50,
+            spread: 100,
+            ticks: 100,
+            gravity: 0.9,
+            origin: { x: 0.1, y: 0.4 },
+            colors: ['#00ff00', '#00bfff', '#FFD700'],
+            zIndex: 10001
         });
         confetti({
             particleCount: 100,
             angle: 120,
-            spread: 55,
-            origin: { x: 1 },
-            colors: ['#FED6E3', '#ffffff', '#FF69B4']
+            startVelocity: 50,
+            spread: 100,
+            ticks: 100,
+            gravity: 0.9,
+            origin: { x: 0.9, y: 0.4 },
+            colors: ['#FF1744', '#FF69B4', '#ffffff'],
+            zIndex: 10001
         });
     }, 1000);
 }
