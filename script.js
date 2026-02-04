@@ -1,12 +1,12 @@
 let noBtnClickCount = 0;
-let fireworksInterval;
+let fireworksInstance = null;
 let audioUnmuted = false;
 const noBtn = document.getElementById('noBtn');
 const suspenseMusic = document.getElementById('suspenseMusic');
 const romanticMusic = document.getElementById('romanticMusic');
 
 // Set volumes
-suspenseMusic.volume = 0.4;
+suspenseMusic.volume = 0.6;
 romanticMusic.volume = 0.4;
 
 // Start muted autoplay on page load (bypasses browser autoplay restrictions)
@@ -14,7 +14,21 @@ window.addEventListener('load', function() {
     suspenseMusic.play().catch(error => {
         console.log('Autoplay started muted');
     });
+    
+    // Force GIF animation by reloading them after a short delay
+    setTimeout(forceGifAnimation, 100);
 });
+
+// Function to force GIF animations to play (especially on mobile)
+function forceGifAnimation() {
+    const allGifs = document.querySelectorAll('img[src$=".gif"]');
+    allGifs.forEach(gif => {
+        const src = gif.src;
+        gif.src = '';
+        gif.src = src;
+    });
+    console.log('GIF animations forced to reload');
+}
 
 // Error handling for audio files
 suspenseMusic.addEventListener('error', function(e) {
@@ -102,167 +116,104 @@ function handleYes() {
     const celebration = document.getElementById('celebration');
     celebration.classList.add('active');
     
-    // Launch amazing fireworks using canvas-confetti
+    // Force celebration GIFs to animate after celebration screen appears
+    setTimeout(() => {
+        const celebrationGifs = celebration.querySelectorAll('img[src$=".gif"]');
+        celebrationGifs.forEach(gif => {
+            const src = gif.src;
+            gif.src = '';
+            gif.src = src;
+        });
+        console.log('Celebration GIFs animation triggered');
+    }, 100);
+    
+    // Launch spectacular fireworks using Fireworks.js
     launchFireworksShow();
     
-    // Create massive confetti shower
-    for (let i = 0; i < 150; i++) {
-        setTimeout(() => createConfetti(), i * 20);
-    }
-    
     // Create sparkles continuously
-    const sparkleInterval = setInterval(() => {
-        for (let i = 0; i < 3; i++) {
+    setInterval(() => {
+        for (let i = 0; i < 5; i++) {
             createSparkle();
         }
-    }, 200);
+    }, 300);
     
-    // Keep confetti going
-    setTimeout(() => {
-        setInterval(() => {
-            for (let i = 0; i < 5; i++) {
-                createConfetti();
-            }
-        }, 500);
-    }, 3000);
-    
-    // Add continuous firework bursts every 3 seconds
+    // Create floating hearts
     setInterval(() => {
-        confetti({
-            particleCount: 120,
-            startVelocity: 50,
-            spread: 360,
-            ticks: 100,
-            gravity: 0.8,
-            origin: { x: Math.random() * 0.6 + 0.2, y: Math.random() * 0.2 + 0.2 },
-            colors: ['#FF6B9D', '#F35588', '#FFD700', '#ff1493', '#00CED1', '#ffffff'],
-            shapes: ['circle', 'square'],
-            scalar: 1.3,
-            zIndex: 10001
-        });
-    }, 3000);
-    
-    // Add side firework bursts
-    setInterval(() => {
-        confetti({
-            particleCount: 80,
-            angle: 60,
-            startVelocity: 45,
-            spread: 120,
-            ticks: 100,
-            gravity: 0.85,
-            origin: { x: 0.1, y: 0.3 },
-            colors: ['#FF6B9D', '#FFD700', '#00ff00'],
-            zIndex: 10001
-        });
-        confetti({
-            particleCount: 80,
-            angle: 120,
-            startVelocity: 45,
-            spread: 120,
-            ticks: 100,
-            gravity: 0.85,
-            origin: { x: 0.9, y: 0.3 },
-            colors: ['#F35588', '#00bfff', '#ff1493'],
-            zIndex: 10001
-        });
-    }, 4000);
-}
-
-// Professional fireworks using canvas-confetti library
-function launchFireworksShow() {
-    const duration = 15 * 1000;
-    const animationEnd = Date.now() + duration;
-
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
-    // Realistic fireworks that explode in the sky
-    const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
-        }
-
-        const particleCount = 100;
-        
-        // Create firework explosions at random positions in the upper portion of screen
-        confetti({
-            particleCount,
-            startVelocity: 45,
-            spread: 360,
-            ticks: 100,
-            gravity: 0.8,
-            decay: 0.91,
-            scalar: 1.2,
-            origin: { 
-                x: randomInRange(0.2, 0.8), 
-                y: randomInRange(0.2, 0.4) 
-            },
-            colors: ['#FFD700', '#FF6B9D', '#00ff00', '#00bfff', '#FF1744', '#ffffff'],
-            shapes: ['circle', 'square'],
-            zIndex: 10001
-        });
-    }, 400);
-
-    // Additional spectacular firework bursts
-    setTimeout(() => {
-        confetti({
-            particleCount: 150,
-            startVelocity: 55,
-            spread: 360,
-            ticks: 120,
-            gravity: 0.8,
-            decay: 0.9,
-            scalar: 1.5,
-            origin: { x: 0.5, y: 0.3 },
-            colors: ['#FFD700', '#FF6B9D', '#F35588', '#ffffff'],
-            shapes: ['star', 'circle'],
-            zIndex: 10001
-        });
+        createFloatingHeart();
     }, 500);
-
-    // Side fireworks
-    setTimeout(() => {
-        confetti({
-            particleCount: 100,
-            angle: 60,
-            startVelocity: 50,
-            spread: 100,
-            ticks: 100,
-            gravity: 0.9,
-            origin: { x: 0.1, y: 0.4 },
-            colors: ['#00ff00', '#00bfff', '#FFD700'],
-            zIndex: 10001
-        });
-        confetti({
-            particleCount: 100,
-            angle: 120,
-            startVelocity: 50,
-            spread: 100,
-            ticks: 100,
-            gravity: 0.9,
-            origin: { x: 0.9, y: 0.4 },
-            colors: ['#FF1744', '#FF69B4', '#ffffff'],
-            zIndex: 10001
-        });
-    }, 1000);
 }
 
-function createConfetti() {
-    const confetti = document.createElement('div');
-    confetti.className = 'confetti';
-    confetti.style.left = Math.random() * 100 + 'vw';
-    confetti.style.background = ['#FF6B9D', '#F35588', '#FFD700', '#00ff00', '#00bfff', '#FF1744', '#FED6E3'][Math.floor(Math.random() * 7)];
-    confetti.style.width = (Math.random() * 10 + 5) + 'px';
-    confetti.style.height = confetti.style.width;
-    confetti.style.animationDelay = Math.random() * 3 + 's';
-    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-    document.body.appendChild(confetti);
+// Professional fireworks using Fireworks.js library
+function launchFireworksShow() {
+    const container = document.getElementById('fireworks-container');
     
-    setTimeout(() => confetti.remove(), 5000);
+    // Initialize Fireworks.js with spectacular settings
+    fireworksInstance = new Fireworks.default(container, {
+        autoresize: true,
+        opacity: 0.5,
+        acceleration: 1.05,
+        friction: 0.97,
+        gravity: 1.5,
+        particles: 90,
+        traceLength: 3,
+        traceSpeed: 10,
+        explosion: 6,
+        intensity: 35,
+        flickering: 50,
+        lineStyle: 'round',
+        hue: {
+            min: 0,
+            max: 360
+        },
+        delay: {
+            min: 30,
+            max: 60
+        },
+        rocketsPoint: {
+            min: 50,
+            max: 50
+        },
+        lineWidth: {
+            explosion: {
+                min: 1,
+                max: 4
+            },
+            trace: {
+                min: 1,
+                max: 2
+            }
+        },
+        brightness: {
+            min: 50,
+            max: 80
+        },
+        decay: {
+            min: 0.015,
+            max: 0.03
+        },
+        mouse: {
+            click: false,
+            move: false,
+            max: 1
+        }
+    });
+    
+    // Start the fireworks show
+    fireworksInstance.start();
+    
+    console.log('🎆 Fireworks show started!');
+}
+
+function createFloatingHeart() {
+    const heart = document.createElement('div');
+    heart.className = 'floating-celebration-heart';
+    heart.textContent = ['💖', '💕', '💗', '💓', '💝'][Math.floor(Math.random() * 5)];
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+    heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+    document.getElementById('celebration').appendChild(heart);
+    
+    setTimeout(() => heart.remove(), 7000);
 }
 
 function createSparkle() {

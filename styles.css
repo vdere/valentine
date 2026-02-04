@@ -307,20 +307,36 @@ button {
     }
 }
 
-.confetti {
+/* Floating celebration hearts */
+.floating-celebration-heart {
     position: fixed;
-    width: 10px;
-    height: 10px;
-    background: #f093fb;
-    animation: confetti-fall 3s linear infinite;
+    bottom: -50px;
+    animation: floatUpCelebration linear forwards;
+    z-index: 100;
+    pointer-events: none;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.8));
 }
 
-@keyframes confetti-fall {
-    to {
-        transform: translateY(100vh) rotate(360deg);
+@keyframes floatUpCelebration {
+    0% {
+        bottom: -50px;
+        opacity: 0;
+        transform: translateX(0) rotate(0deg);
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        bottom: 110vh;
+        opacity: 0;
+        transform: translateX(100px) rotate(360deg);
     }
 }
 
+/* GIF animations */
 .office-gifs img {
     animation: bounceIn 0.8s ease-out;
 }
@@ -339,7 +355,6 @@ button {
     }
 }
 
-/* Suspense GIFs styling */
 .suspense-gifs img {
     animation: suspenseWiggle 2s ease-in-out infinite;
     transition: transform 0.3s ease;
@@ -367,22 +382,31 @@ button {
 /* Sparkles */
 .sparkle {
     position: fixed;
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     background: white;
     border-radius: 50%;
-    animation: sparkleFloat 2s ease-in-out infinite;
-    box-shadow: 0 0 10px white, 0 0 20px white;
+    animation: sparkleFloat 2s ease-in-out forwards;
+    box-shadow: 0 0 15px white, 0 0 30px rgba(255, 215, 0, 0.8);
+    z-index: 100;
 }
 
 @keyframes sparkleFloat {
-    0%, 100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
     }
-    50% {
-        transform: translateY(-20px) scale(1.5);
-        opacity: 0.5;
+    20% {
+        opacity: 1;
+        transform: scale(1.5) rotate(90deg);
+    }
+    80% {
+        opacity: 1;
+        transform: scale(1.5) rotate(270deg);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0) rotate(360deg);
     }
 }
 
