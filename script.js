@@ -8,7 +8,7 @@ const suspenseMusic = document.getElementById('suspenseMusic');
 const romanticMusic = document.getElementById('romanticMusic');
 
 // Set volumes
-suspenseMusic.volume = 0.8;
+suspenseMusic.volume = 1.0;
 romanticMusic.volume = 0.4;
 
 // Start muted autoplay on page load (bypasses browser autoplay restrictions)
@@ -51,9 +51,8 @@ function showVolumeWarning() {
     warning.id = 'volume-warning';
     warning.innerHTML = `
         <div class="volume-warning-content">
-            <div class="volume-icon">🔊</div>
             <h3>Turn Up the Volume!</h3>
-            <p>Your device volume might be muted. Please increase your phone's volume for the best experience!</p>
+            <p>Increase phone volume to hear audio</p>
             <button class="volume-test-btn" onclick="testAudio()">Test Audio</button>
             <button class="volume-dismiss-btn" onclick="dismissVolumeWarning()">Got it!</button>
         </div>
@@ -125,11 +124,7 @@ function addVolumeControl() {
     const volumeControl = document.createElement('div');
     volumeControl.id = 'volume-control';
     volumeControl.innerHTML = `
-        <button class="volume-btn" onclick="toggleVolume()" title="Toggle Volume">
-            <span id="volume-icon">🔊</span>
-        </button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="${suspenseMusic.volume}" 
-               onchange="adjustVolume(this.value)" style="display: none;">
+        <div id="volume-text">Turn up the volume</div>
     `;
     volumeControl.style.cssText = `
         position: fixed;
@@ -137,6 +132,14 @@ function addVolumeControl() {
         right: 20px;
         z-index: 1000;
         animation: slideInRight 0.5s ease;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 15px;
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-weight: bold;
+        color: #FF6B9D;
+        font-size: 14px;
+        text-align: center;
     `;
     
     document.body.appendChild(volumeControl);
@@ -144,36 +147,12 @@ function addVolumeControl() {
 
 // Function to toggle volume on/off
 function toggleVolume() {
-    const currentMusic = romanticMusic.paused ? suspenseMusic : romanticMusic;
-    const volumeIcon = document.getElementById('volume-icon');
-    const volumeSlider = document.getElementById('volume-slider');
-    
-    if (currentMusic.volume > 0) {
-        // Mute
-        currentMusic.volume = 0;
-        volumeIcon.textContent = '🔇';
-        volumeSlider.value = 0;
-    } else {
-        // Unmute to previous level
-        const newVolume = Math.max(0.3, parseFloat(volumeSlider.value) || 0.8);
-        currentMusic.volume = newVolume;
-        volumeSlider.value = newVolume;
-        volumeIcon.textContent = '🔊';
-    }
+    // Removed - no longer needed
 }
 
 // Function to adjust volume via slider
 function adjustVolume(value) {
-    const currentMusic = romanticMusic.paused ? suspenseMusic : romanticMusic;
-    const volumeIcon = document.getElementById('volume-icon');
-    
-    currentMusic.volume = parseFloat(value);
-    
-    if (parseFloat(value) === 0) {
-        volumeIcon.textContent = '🔇';
-    } else {
-        volumeIcon.textContent = '🔊';
-    }
+    // Removed - no longer needed
 }
 
 // Error handling for audio files
