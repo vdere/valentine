@@ -112,6 +112,12 @@ function dismissVolumeWarning() {
 
 // Function to add volume control button
 function addVolumeControl() {
+    // Only show volume control on the main page, not on celebration screen
+    const celebration = document.getElementById('celebration');
+    if (celebration.classList.contains('active')) {
+        return; // Don't show volume control on celebration screen
+    }
+    
     // Remove existing volume control if present
     const existingControl = document.getElementById('volume-control');
     if (existingControl) {
