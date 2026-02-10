@@ -582,78 +582,7 @@ button {
 
 /* Mobile GIF Animation Fixes */
 img[src*=".gif"] {
-    /* Force hardware acceleration */
     transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    
-    /* Prevent browser optimization that stops animations */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: optimize-contrast;
-    
-    /* Force animation on mobile */
-    -webkit-animation: gifForce 0.1s infinite;
-    animation: gifForce 0.1s infinite;
-}
-
-@-webkit-keyframes gifForce {
-    0% { opacity: 0.999; }
-    100% { opacity: 1; }
-}
-
-@keyframes gifForce {
-    0% { opacity: 0.999; }
-    100% { opacity: 1; }
-}
-
-/* Additional mobile-specific GIF fixes */
-@media (max-width: 768px) {
-    img[src*=".gif"] {
-        /* Force GPU acceleration on mobile */
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -webkit-perspective: 1000;
-        perspective: 1000;
-        
-        /* Prevent mobile browsers from pausing animations */
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-    }
-}
-
-/* Aggressive mobile GIF forcing for stubborn browsers */
-@media (max-width: 480px) {
-    img[src*=".gif"] {
-        /* Force continuous animation check */
-        animation: mobileGifForce 1s infinite;
-        -webkit-animation: mobileGifForce 1s infinite;
-    }
-}
-
-@-webkit-keyframes mobileGifForce {
-    0%, 99% { 
-        opacity: 0.9999;
-        -webkit-transform: translate3d(0, 0, 0) scale(1);
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% { 
-        opacity: 1;
-        -webkit-transform: translate3d(0, 0, 0) scale(1.0001);
-        transform: translate3d(0, 0, 0) scale(1.0001);
-    }
-}
-
-@keyframes mobileGifForce {
-    0%, 99% { 
-        opacity: 0.9999;
-        transform: translate3d(0, 0, 0) scale(1);
-    }
-    100% { 
-        opacity: 1;
-        transform: translate3d(0, 0, 0) scale(1.0001);
-    }
 }
 
 @media (max-width: 768px) {

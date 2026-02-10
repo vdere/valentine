@@ -17,9 +17,6 @@ window.addEventListener('load', function() {
         console.log('Autoplay started muted');
     });
     
-    // Force GIF animation by reloading them after a short delay
-    setTimeout(forceGifAnimation, 100);
-    
     // Start volume monitoring
     startVolumeMonitoring();
 });
@@ -257,17 +254,6 @@ function handleYes() {
     const celebration = document.getElementById('celebration');
     celebration.classList.add('active');
     
-    // Force celebration GIFs to animate after celebration screen appears
-    setTimeout(() => {
-        const celebrationGifs = celebration.querySelectorAll('img[src$=".gif"]');
-        celebrationGifs.forEach(gif => {
-            const src = gif.src;
-            gif.src = '';
-            gif.src = src;
-        });
-        console.log('Celebration GIFs animation triggered');
-    }, 100);
-    
     // Update volume control for celebration music
     setTimeout(() => {
         const volumeSlider = document.getElementById('volume-slider');
@@ -353,148 +339,7 @@ function launchFireworksShow() {
     console.log('🎆 Fireworks show started!');
 }
 
-// Force GIF animation on mobile browsers - comprehensive solution
-function forceGifAnimation() {
-    console.log('🔄 Forcing GIF animations...');
-    
-    const allGifs = document.querySelectorAll('img[src*=".gif"]');
-    console.log(`Found ${allGifs.length} GIFs to animate`);
-    
-    allGifs.forEach((gif, index) => {
-        // Method 1: Force reload by clearing and resetting src
-        const originalSrc = gif.src;
-        gif.src = '';
-        setTimeout(() => {
-            gif.src = originalSrc;
-        }, 50 + (index * 20));
-        
-        // Method 2: Add touch/click listeners to restart animation
-        const restartAnimation = () => {
-            console.log(`Restarting GIF animation for: ${gif.alt}`);
-            const currentSrc = gif.src;
-            gif.src = '';
-            setTimeout(() => {
-                gif.src = currentSrc;
-            }, 10);
-        };
-        
-        // Remove existing listeners to avoid duplicates
-        gif.removeEventListener('touchstart', restartAnimation);
-        gif.removeEventListener('click', restartAnimation);
-        
-        // Add new listeners
-        gif.addEventListener('touchstart', restartAnimation, { passive: true });
-        gif.addEventListener('click', restartAnimation);
-        
-        // Method 3: Intersection Observer for when GIFs come into view
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        console.log(`GIF ${gif.alt} is now visible, forcing animation`);
-                        const currentSrc = gif.src;
-                        gif.src = '';
-                        setTimeout(() => {
-                            gif.src = currentSrc;
-                        }, 10);
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            observer.observe(gif);
-        }
-        
-        // Method 4: Periodic refresh for stubborn browsers
-        const refreshInterval = setInterval(() => {
-            if (document.body.contains(gif)) {
-                const currentSrc = gif.src;
-                gif.src = '';
-                setTimeout(() => {
-                    gif.src = currentSrc;
-                }, 10);
-            } else {
-                clearInterval(refreshInterval);
-            }
-        }, 5000 + (index * 1000)); // Stagger the refreshes
-        
-        // Method 5: Force animation on page visibility change
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                console.log('Page became visible, refreshing GIFs');
-                setTimeout(() => {
-                    const currentSrc = gif.src;
-                    gif.src = '';
-                    setTimeout(() => {
-                        gif.src = currentSrc;
-                    }, 10);
-                }, index * 50);
-            }
-        });
-        
-        // Method 6: Force animation on scroll (mobile browsers often pause on scroll)
-        let scrollTimeout;
-        const handleScroll = () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                console.log('Scroll ended, refreshing GIFs');
-                const currentSrc = gif.src;
-                gif.src = '';
-                setTimeout(() => {
-                    gif.src = currentSrc;
-                }, 10);
-            }, 150);
-        };
-        
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        
-        // Method 7: Force animation on orientation change
-        window.addEventListener('orientationchange', () => {
-            setTimeout(() => {
-                console.log('Orientation changed, refreshing GIFs');
-                const currentSrc = gif.src;
-                gif.src = '';
-                setTimeout(() => {
-                    gif.src = currentSrc;
-                }, 10);
-            }, 500);
-        });
-        
-        // Method 8: Add CSS animation to force GPU acceleration
-        gif.style.willChange = 'transform';
-        gif.style.transform = 'translateZ(0)';
-        
-        // Method 9: Preload and cache GIFs
-        const img = new Image();
-        img.onload = () => {
-            console.log(`GIF preloaded: ${gif.alt}`);
-        };
-        img.src = originalSrc;
-    });
-    
-    // Additional mobile-specific fixes
-    if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        console.log('📱 Mobile device detected, applying additional fixes');
-        
-        // Force reflow to trigger animations
-        setTimeout(() => {
-            document.body.style.display = 'none';
-            document.body.offsetHeight; // Trigger reflow
-            document.body.style.display = '';
-        }, 100);
-        
-        // Add meta viewport refresh
-        let viewport = document.querySelector('meta[name=viewport]');
-        if (viewport) {
-            const content = viewport.getAttribute('content');
-            viewport.setAttribute('content', content + ', user-scalable=no');
-            setTimeout(() => {
-                viewport.setAttribute('content', content);
-            }, 100);
-        }
-    }
-    
-    console.log('✅ GIF animation forcing complete');
-}
+
 
 function createFloatingHeart() {
     const heart = document.createElement('div');
