@@ -1,12 +1,14 @@
 let noBtnClickCount = 0;
 let fireworksInstance = null;
 let audioUnmuted = false;
+let volumeCheckInterval = null;
+let volumeWarningShown = false;
 const noBtn = document.getElementById('noBtn');
 const suspenseMusic = document.getElementById('suspenseMusic');
 const romanticMusic = document.getElementById('romanticMusic');
 
 // Set volumes
-suspenseMusic.volume = 0.6;
+suspenseMusic.volume = 0.8;
 romanticMusic.volume = 0.4;
 
 // Start muted autoplay on page load (bypasses browser autoplay restrictions)
@@ -17,17 +19,161 @@ window.addEventListener('load', function() {
     
     // Force GIF animation by reloading them after a short delay
     setTimeout(forceGifAnimation, 100);
+    
+    // Start volume monitoring
+    startVolumeMonitoring();
 });
 
-// Function to force GIF animations to play (especially on mobile)
-function forceGifAnimation() {
-    const allGifs = document.querySelectorAll('img[src$=".gif"]');
-    allGifs.forEach(gif => {
-        const src = gif.src;
-        gif.src = '';
-        gif.src = src;
+// Function to monitor if audio is actually playing and show warnings
+function startVolumeMonitoring() {
+    volumeCheckInterval = setInterval(() => {
+        // Only check after user has interacted and audio should be playing
+        if (audioUnmuted && !volumeWarningShown) {
+            // Check if suspense music is paused when it should be playing
+            if (suspenseMusic.paused && !romanticMusic.paused) {
+                // If romantic music is playing but suspense should be, don't show warning
+                return;
+            }
+            if (suspenseMusic.paused && romanticMusic.paused) {
+                showVolumeWarning();
+            }
+        }
+    }, 3000); // Check every 3 seconds, less frequent
+}
+
+// Function to show volume warning overlay
+function showVolumeWarning() {
+    if (volumeWarningShown) return;
+    
+    volumeWarningShown = true;
+    
+    const warning = document.createElement('div');
+    warning.id = 'volume-warning';
+    warning.innerHTML = `
+        <div class="volume-warning-content">
+            <div class="volume-icon">🔊</div>
+            <h3>Turn Up the Volume!</h3>
+            <p>Your device volume might be muted. Please increase your phone's volume for the best experience!</p>
+            <button class="volume-test-btn" onclick="testAudio()">Test Audio</button>
+            <button class="volume-dismiss-btn" onclick="dismissVolumeWarning()">Got it!</button>
+        </div>
+    `;
+    warning.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.5s ease;
+    `;
+    
+    document.body.appendChild(warning);
+    
+    // Auto-dismiss after 10 seconds
+    setTimeout(() => {
+        if (warning.parentNode) {
+            dismissVolumeWarning();
+        }
+    }, 10000);
+}
+
+// Function to test audio playback
+function testAudio() {
+    unmuteAudio();
+    suspenseMusic.play().then(() => {
+        console.log('Audio test successful!');
+        // Show success feedback
+        const testBtn = document.querySelector('.volume-test-btn');
+        if (testBtn) {
+            testBtn.textContent = '✅ Audio Working!';
+            testBtn.style.background = '#4CAF50';
+            setTimeout(() => dismissVolumeWarning(), 2000);
+        }
+    }).catch(error => {
+        console.log('Audio test failed:', error);
+        const testBtn = document.querySelector('.volume-test-btn');
+        if (testBtn) {
+            testBtn.textContent = '❌ Check Volume';
+            testBtn.style.background = '#f44336';
+        }
     });
-    console.log('GIF animations forced to reload');
+}
+
+// Function to dismiss volume warning
+function dismissVolumeWarning() {
+    const warning = document.getElementById('volume-warning');
+    if (warning) {
+        warning.style.animation = 'fadeOut 0.5s ease';
+        setTimeout(() => warning.remove(), 500);
+    }
+    volumeWarningShown = false;
+}
+
+// Function to add volume control button
+function addVolumeControl() {
+    // Remove existing volume control if present
+    const existingControl = document.getElementById('volume-control');
+    if (existingControl) {
+        existingControl.remove();
+    }
+    
+    const volumeControl = document.createElement('div');
+    volumeControl.id = 'volume-control';
+    volumeControl.innerHTML = `
+        <button class="volume-btn" onclick="toggleVolume()" title="Toggle Volume">
+            <span id="volume-icon">🔊</span>
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="${suspenseMusic.volume}" 
+               onchange="adjustVolume(this.value)" style="display: none;">
+    `;
+    volumeControl.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        animation: slideInRight 0.5s ease;
+    `;
+    
+    document.body.appendChild(volumeControl);
+}
+
+// Function to toggle volume on/off
+function toggleVolume() {
+    const currentMusic = romanticMusic.paused ? suspenseMusic : romanticMusic;
+    const volumeIcon = document.getElementById('volume-icon');
+    const volumeSlider = document.getElementById('volume-slider');
+    
+    if (currentMusic.volume > 0) {
+        // Mute
+        currentMusic.volume = 0;
+        volumeIcon.textContent = '🔇';
+        volumeSlider.value = 0;
+    } else {
+        // Unmute to previous level
+        const newVolume = Math.max(0.3, parseFloat(volumeSlider.value) || 0.8);
+        currentMusic.volume = newVolume;
+        volumeSlider.value = newVolume;
+        volumeIcon.textContent = '🔊';
+    }
+}
+
+// Function to adjust volume via slider
+function adjustVolume(value) {
+    const currentMusic = romanticMusic.paused ? suspenseMusic : romanticMusic;
+    const volumeIcon = document.getElementById('volume-icon');
+    
+    currentMusic.volume = parseFloat(value);
+    
+    if (parseFloat(value) === 0) {
+        volumeIcon.textContent = '🔇';
+    } else {
+        volumeIcon.textContent = '🔊';
+    }
 }
 
 // Error handling for audio files
@@ -55,7 +201,23 @@ function unmuteAudio() {
     if (!audioUnmuted) {
         suspenseMusic.muted = false;
         audioUnmuted = true;
+        localStorage.setItem('userInteracted', 'true');
         console.log('Audio unmuted!');
+        
+        // Start playing suspense music after unmute
+        suspenseMusic.play().then(() => {
+            console.log('Suspense music started playing after unmute');
+        }).catch(error => {
+            console.log('Failed to start suspense music after unmute:', error);
+        });
+        
+        // Clear volume monitoring since user has interacted
+        if (volumeCheckInterval) {
+            clearInterval(volumeCheckInterval);
+        }
+        
+        // Add volume control button after successful unmute
+        setTimeout(addVolumeControl, 1000);
     }
 }
 
@@ -126,6 +288,14 @@ function handleYes() {
         });
         console.log('Celebration GIFs animation triggered');
     }, 100);
+    
+    // Update volume control for celebration music
+    setTimeout(() => {
+        const volumeSlider = document.getElementById('volume-slider');
+        if (volumeSlider) {
+            volumeSlider.value = romanticMusic.volume;
+        }
+    }, 500);
     
     // Launch spectacular fireworks using Fireworks.js
     launchFireworksShow();
@@ -202,6 +372,149 @@ function launchFireworksShow() {
     fireworksInstance.start();
     
     console.log('🎆 Fireworks show started!');
+}
+
+// Force GIF animation on mobile browsers - comprehensive solution
+function forceGifAnimation() {
+    console.log('🔄 Forcing GIF animations...');
+    
+    const allGifs = document.querySelectorAll('img[src*=".gif"]');
+    console.log(`Found ${allGifs.length} GIFs to animate`);
+    
+    allGifs.forEach((gif, index) => {
+        // Method 1: Force reload by clearing and resetting src
+        const originalSrc = gif.src;
+        gif.src = '';
+        setTimeout(() => {
+            gif.src = originalSrc;
+        }, 50 + (index * 20));
+        
+        // Method 2: Add touch/click listeners to restart animation
+        const restartAnimation = () => {
+            console.log(`Restarting GIF animation for: ${gif.alt}`);
+            const currentSrc = gif.src;
+            gif.src = '';
+            setTimeout(() => {
+                gif.src = currentSrc;
+            }, 10);
+        };
+        
+        // Remove existing listeners to avoid duplicates
+        gif.removeEventListener('touchstart', restartAnimation);
+        gif.removeEventListener('click', restartAnimation);
+        
+        // Add new listeners
+        gif.addEventListener('touchstart', restartAnimation, { passive: true });
+        gif.addEventListener('click', restartAnimation);
+        
+        // Method 3: Intersection Observer for when GIFs come into view
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        console.log(`GIF ${gif.alt} is now visible, forcing animation`);
+                        const currentSrc = gif.src;
+                        gif.src = '';
+                        setTimeout(() => {
+                            gif.src = currentSrc;
+                        }, 10);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            observer.observe(gif);
+        }
+        
+        // Method 4: Periodic refresh for stubborn browsers
+        const refreshInterval = setInterval(() => {
+            if (document.body.contains(gif)) {
+                const currentSrc = gif.src;
+                gif.src = '';
+                setTimeout(() => {
+                    gif.src = currentSrc;
+                }, 10);
+            } else {
+                clearInterval(refreshInterval);
+            }
+        }, 5000 + (index * 1000)); // Stagger the refreshes
+        
+        // Method 5: Force animation on page visibility change
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                console.log('Page became visible, refreshing GIFs');
+                setTimeout(() => {
+                    const currentSrc = gif.src;
+                    gif.src = '';
+                    setTimeout(() => {
+                        gif.src = currentSrc;
+                    }, 10);
+                }, index * 50);
+            }
+        });
+        
+        // Method 6: Force animation on scroll (mobile browsers often pause on scroll)
+        let scrollTimeout;
+        const handleScroll = () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                console.log('Scroll ended, refreshing GIFs');
+                const currentSrc = gif.src;
+                gif.src = '';
+                setTimeout(() => {
+                    gif.src = currentSrc;
+                }, 10);
+            }, 150);
+        };
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        
+        // Method 7: Force animation on orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                console.log('Orientation changed, refreshing GIFs');
+                const currentSrc = gif.src;
+                gif.src = '';
+                setTimeout(() => {
+                    gif.src = currentSrc;
+                }, 10);
+            }, 500);
+        });
+        
+        // Method 8: Add CSS animation to force GPU acceleration
+        gif.style.willChange = 'transform';
+        gif.style.transform = 'translateZ(0)';
+        
+        // Method 9: Preload and cache GIFs
+        const img = new Image();
+        img.onload = () => {
+            console.log(`GIF preloaded: ${gif.alt}`);
+        };
+        img.src = originalSrc;
+    });
+    
+    // Additional mobile-specific fixes
+    if (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        console.log('📱 Mobile device detected, applying additional fixes');
+        
+        // Force reflow to trigger animations
+        setTimeout(() => {
+            document.body.style.display = 'none';
+            document.body.offsetHeight; // Trigger reflow
+            document.body.style.display = '';
+        }, 100);
+        
+        // Add meta viewport refresh
+        let viewport = document.querySelector('meta[name=viewport]');
+        if (viewport) {
+            const content = viewport.getAttribute('content');
+            viewport.setAttribute('content', content + ', user-scalable=no');
+            setTimeout(() => {
+                viewport.setAttribute('content', content);
+            }, 100);
+        }
+    }
+    
+    console.log('✅ GIF animation forcing complete');
 }
 
 function createFloatingHeart() {

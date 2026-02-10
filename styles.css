@@ -410,6 +410,252 @@ button {
     }
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Volume Warning Overlay */
+#volume-warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.volume-warning-content {
+    background: linear-gradient(135deg, #FF6B9D, #C06C84);
+    padding: 30px 25px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    animation: zoomIn 0.5s ease;
+}
+
+.volume-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+    animation: bounce 1s infinite;
+}
+
+.volume-warning-content h3 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 900;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.volume-warning-content p {
+    color: #FFE4E1;
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    font-weight: 600;
+}
+
+.volume-test-btn, .volume-dismiss-btn {
+    padding: 12px 25px;
+    margin: 0 8px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.volume-test-btn {
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+}
+
+.volume-test-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.volume-dismiss-btn {
+    background: linear-gradient(135deg, #FF6B9D, #F35588);
+    color: white;
+}
+
+.volume-dismiss-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Volume Control */
+#volume-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.volume-btn {
+    background: linear-gradient(135deg, #FF6B9D, #F35588);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.volume-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+#volume-slider {
+    width: 100px;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFD700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(139, 0, 139, 0.5);
+}
+
+#volume-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #FFD700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(139, 0, 139, 0.5);
+    border: none;
+}
+
+/* Mobile GIF Animation Fixes */
+img[src*=".gif"] {
+    /* Force hardware acceleration */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    
+    /* Prevent browser optimization that stops animations */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: optimize-contrast;
+    
+    /* Force animation on mobile */
+    -webkit-animation: gifForce 0.1s infinite;
+    animation: gifForce 0.1s infinite;
+}
+
+@-webkit-keyframes gifForce {
+    0% { opacity: 0.999; }
+    100% { opacity: 1; }
+}
+
+@keyframes gifForce {
+    0% { opacity: 0.999; }
+    100% { opacity: 1; }
+}
+
+/* Additional mobile-specific GIF fixes */
+@media (max-width: 768px) {
+    img[src*=".gif"] {
+        /* Force GPU acceleration on mobile */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-perspective: 1000;
+        perspective: 1000;
+        
+        /* Prevent mobile browsers from pausing animations */
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Aggressive mobile GIF forcing for stubborn browsers */
+@media (max-width: 480px) {
+    img[src*=".gif"] {
+        /* Force continuous animation check */
+        animation: mobileGifForce 1s infinite;
+        -webkit-animation: mobileGifForce 1s infinite;
+    }
+}
+
+@-webkit-keyframes mobileGifForce {
+    0%, 99% { 
+        opacity: 0.9999;
+        -webkit-transform: translate3d(0, 0, 0) scale(1);
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% { 
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0) scale(1.0001);
+        transform: translate3d(0, 0, 0) scale(1.0001);
+    }
+}
+
+@keyframes mobileGifForce {
+    0%, 99% { 
+        opacity: 0.9999;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    100% { 
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1.0001);
+    }
+}
+
 @media (max-width: 768px) {
     body {
         padding: 10px;
